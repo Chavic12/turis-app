@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const ExploreScreen = () => {
+const BannerItem = () => {
   return (
     <View>
-      <Text>ExploreScreen</Text>
+      <Text>BannerItem</Text>
     </View>
   );
 };
 
-export default ExploreScreen;
+export default BannerItem;

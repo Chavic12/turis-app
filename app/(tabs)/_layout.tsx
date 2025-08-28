@@ -1,45 +1,71 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { useState } from "react";
+import { BottomNavigation, PaperProvider, useTheme } from "react-native-paper";
+import CalendarScreen from "./calendar";
+import ExploreScreen from "./explore";
+import FavoriteScreen from "./favorites";
+import HomeScreen from "./index"; // Cambié IndexScreen por HomeScreen para mayor claridad
+import ProfileScreen from "./profile";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+const renderScene = BottomNavigation.SceneMap({
+  index: HomeScreen,
+  explore: ExploreScreen,
+  calendar: CalendarScreen,
+  favorites: FavoriteScreen,
+  profile: ProfileScreen,
+});
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function TabsLayout() {
+  const [index, setIndex] = useState(0);
+  const theme = useTheme();
+
+  const [routes] = useState([
+    {
+      key: "index",
+      title: "Inicio",
+      focusedIcon: "home",
+      unfocusedIcon: "home-outline",
+    },
+    {
+      key: "explore",
+      title: "Explorar",
+      focusedIcon: "magnify-scan",
+      unfocusedIcon: "magnify",
+    },
+    {
+      key: "calendar",
+      title: "Calendario",
+      focusedIcon: "calendar",
+      unfocusedIcon: "calendar-outline",
+    },
+    {
+      key: "favorites",
+      title: "Favoritos",
+      focusedIcon: "heart",
+      unfocusedIcon: "heart-outline",
+    },
+    {
+      key: "profile",
+      title: "Perfil",
+      focusedIcon: "account",
+      unfocusedIcon: "account-outline",
+    },
+  ]);
 
   return (
-    <Tabs
-      screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
-      }}>
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+    <PaperProvider>
+      <BottomNavigation
+        navigationState={{ index, routes }}
+        onIndexChange={setIndex}
+        renderScene={renderScene}
+        barStyle={{
+          backgroundColor: theme.colors.surface,
+        }}
+        activeColor={theme.colors.primary}
+        inactiveColor={theme.colors.onSurfaceVariant}
+        activeIndicatorStyle={{
+          backgroundColor: theme.colors.inverseOnSurface,
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-        }}
-      />
-    </Tabs>
+    </PaperProvider>
   );
 }
