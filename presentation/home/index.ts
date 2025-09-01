@@ -2,6 +2,7 @@
 export { BannerItem } from "./components/BannerItem";
 export { CategoryItem } from "./components/CategoryItem";
 export { FeaturedEventCard } from "./components/FeaturedEventCard";
+export { HomeHeader } from "./components/HomeHeader";
 export { PopularEventCard } from "./components/PopularEventCard";
 
 // Data
@@ -13,6 +14,7 @@ export { popularEvents, type PopularEvent } from "./data/popularEventsData";
 // Hooks
 export { useCategories, type UseCategoriesReturn } from "./hooks/useCategories";
 export { useFavorites, type UseFavoritesReturn } from "./hooks/useFavorites";
+export { useLocation, type UseLocationReturn } from "./hooks/useLocation";
 
 // Styles
 export {

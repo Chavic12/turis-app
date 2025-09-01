@@ -1,30 +1,13 @@
 import React from "react";
-import {
-  Dimensions,
-  FlatList,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from "react-native";
-import { Avatar, IconButton, Text, useTheme } from "react-native-paper";
-import { useSharedValue } from "react-native-reanimated";
-import Carousel from "react-native-reanimated-carousel";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { window } from "../../constants/sizes";
+import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
+import { Text, useTheme } from "react-native-paper";
 
 // Importaciones organizadas
 import {
-  // Components
-  BannerItem,
   CategoryItem,
-  FeaturedEventCard,
+  HomeHeader,
   PopularEventCard,
-  // Data
-  bannerEvents,
-  bannerStyles,
   categoryStyles,
-  featuredEventStyles,
-  featuredEvents,
   // Styles
   homeStyles,
   popularEventStyles,
@@ -32,19 +15,15 @@ import {
   useCategories,
   // Hooks
   useFavorites,
+  useLocation,
 } from "../../presentation/home";
-
-const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 export default function HomeScreen() {
   const { colors } = useTheme();
-  const progress = useSharedValue<number>(0);
 
   // Custom hooks para manejar estado
-  const {
-    isFavorite: isFeaturedFavorite,
-    toggleFavorite: toggleFeaturedFavorite,
-  } = useFavorites([1]);
+  const { locationText, errorMsg, isLoading } = useLocation();
+
   const {
     isFavorite: isPopularFavorite,
     toggleFavorite: togglePopularFavorite,
@@ -52,42 +31,21 @@ export default function HomeScreen() {
   const { selectedCategory, setSelectedCategory, categories, isSelected } =
     useCategories(1);
 
-  // Handlers
-  const handleJoinEvent = (eventId: number) => {
-    console.log(`Unirse al evento ${eventId}`);
-  };
-
+  // Event handlers
   const handleEventPress = (eventId: number) => {
     console.log(`Ver detalles del evento ${eventId}`);
   };
 
-  const handleSearchPress = () => {
-    console.log("Búsqueda");
-  };
-
-  const handleNotificationsPress = () => {
+  const handleNotificationPress = () => {
     console.log("Notificaciones");
   };
 
   // Render functions
-  const renderBannerItem = ({ item }: { item: any }) => (
-    <BannerItem item={item} />
-  );
-
   const renderCategoryItem = ({ item }: any) => (
     <CategoryItem
       item={item}
       isSelected={isSelected(item.id)}
       onPress={setSelectedCategory}
-    />
-  );
-
-  const renderFeaturedEvent = ({ item }: any) => (
-    <FeaturedEventCard
-      item={item}
-      isFavorite={isFeaturedFavorite(item.id)}
-      onToggleFavorite={toggleFeaturedFavorite}
-      onJoin={handleJoinEvent}
     />
   );
 
@@ -101,69 +59,15 @@ export default function HomeScreen() {
   );
 
   return (
-    <SafeAreaView
-      style={[homeStyles.container, { backgroundColor: colors.background }]}
-    >
-      <ScrollView style={homeStyles.scrollView}>
-        {/* Header */}
-        <View style={homeStyles.header}>
-          <View style={homeStyles.userSection}>
-            <Avatar.Image
-              size={50}
-              source={{
-                uri: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face",
-              }}
-            />
-            <View style={homeStyles.greetingSection}>
-              <Text
-                style={[
-                  homeStyles.greeting,
-                  { color: colors.onSurfaceVariant },
-                ]}
-              >
-                ¡Buenos días! 👋
-              </Text>
-              <Text
-                style={[homeStyles.userName, { color: colors.onBackground }]}
-              >
-                Xavier
-              </Text>
-            </View>
-          </View>
+    <>
+      <HomeHeader
+        locationText={locationText}
+        errorMsg={errorMsg}
+        isLoading={isLoading}
+        onNotificationPress={handleNotificationPress}
+      />
 
-          <View style={homeStyles.headerActions}>
-            <IconButton icon="magnify" size={24} onPress={handleSearchPress} />
-            <IconButton
-              icon="bell-outline"
-              size={24}
-              onPress={handleNotificationsPress}
-            />
-          </View>
-        </View>
-
-        {/* Banner Dinámico */}
-        <View style={bannerStyles.bannerSection}>
-          <Carousel
-            autoPlayInterval={2000}
-            data={bannerEvents}
-            height={258}
-            loop={true}
-            pagingEnabled={true}
-            snapEnabled={true}
-            width={window.width}
-            style={{
-              width: window.width,
-            }}
-            mode="parallax"
-            modeConfig={{
-              parallaxScrollingScale: 0.9,
-              parallaxScrollingOffset: 50,
-            }}
-            onProgressChange={progress}
-            renderItem={renderBannerItem}
-          />
-        </View>
-
+      <ScrollView>
         {/* Categorías */}
         <View style={categoryStyles.categoriesSection}>
           <Text
@@ -178,22 +82,6 @@ export default function HomeScreen() {
             horizontal
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={categoryStyles.categoriesContainer}
-          />
-        </View>
-
-        {/* Eventos Destacados */}
-        <View style={featuredEventStyles.featuredSection}>
-          <Text
-            style={[homeStyles.sectionTitle, { color: colors.onBackground }]}
-          >
-            Eventos Destacados
-          </Text>
-          <FlatList
-            data={featuredEvents}
-            renderItem={renderFeaturedEvent}
-            keyExtractor={(item) => item.id.toString()}
-            scrollEnabled={false}
-            showsVerticalScrollIndicator={false}
           />
         </View>
 
@@ -221,6 +109,6 @@ export default function HomeScreen() {
           />
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </>
   );
 }
