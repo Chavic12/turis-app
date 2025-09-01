@@ -1,5 +1,5 @@
-import CultureIcon from "@/components/Culture";
-import React from "react";
+import LottieView from "lottie-react-native";
+import { useEffect, useRef } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 import { Category } from "../data/categoriesData";
@@ -11,12 +11,32 @@ interface CategoryItemProps {
   onPress: (categoryId: number) => void;
 }
 
-export const CategoryItem: React.FC<CategoryItemProps> = ({
+export const CategoryItem = ({
   item,
   isSelected,
   onPress,
-}) => {
+}: CategoryItemProps) => {
   const { colors } = useTheme();
+  const animationRef = useRef<LottieView>(null);
+
+  const handlePress = () => {
+    onPress(item.id);
+  };
+
+  useEffect(() => {
+    if (item.isLottie && animationRef.current) {
+      if (isSelected) {
+        // Cuando está seleccionado: reproduce la animación una vez
+        animationRef.current.play(10, 60);
+      } else {
+        // Cuando no está seleccionado: vuelve al estado inicial
+        animationRef.current.reset();
+        animationRef.current.pause();
+      }
+    }
+  }, [isSelected, item.isLottie]);
+
+  const IconComponent = item.icon;
 
   return (
     <TouchableOpacity
@@ -27,15 +47,21 @@ export const CategoryItem: React.FC<CategoryItemProps> = ({
           borderColor: isSelected ? "#E8F652" : "transparent",
         },
       ]}
-      onPress={() => onPress(item.id)}
+      onPress={handlePress}
     >
-      <View
-        style={[
-          categoryStyles.categoryIcon,
-          { backgroundColor: item.color + "20" },
-        ]}
-      >
-        <CultureIcon width={40} height={40} fill={item.color} />
+      <View style={[categoryStyles.categoryIcon]}>
+        {/** Si es Lottie, controla la animación según selección */}
+        {item.isLottie ? (
+          <LottieView
+            ref={animationRef}
+            source={item.iconSource}
+            loop={true}
+            autoPlay={false}
+            style={{ width: 50, height: 50 }}
+          />
+        ) : IconComponent ? (
+          <IconComponent />
+        ) : null}
       </View>
       <Text
         style={[

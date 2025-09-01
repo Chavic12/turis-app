@@ -63,7 +63,7 @@ export const bannerStyles = StyleSheet.create({
   },
   bannerCard: {
     borderRadius: 16,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   bannerImage: {
     height: 160,
@@ -122,7 +122,7 @@ export const featuredEventStyles = StyleSheet.create({
   eventCard: {
     marginBottom: 16,
     borderRadius: 16,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   eventImage: {
     height: 180,
@@ -176,7 +176,7 @@ export const popularEventStyles = StyleSheet.create({
   },
   popularCard: {
     borderRadius: 12,
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   popularImage: {
     height: 120,

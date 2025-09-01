@@ -403,7 +403,7 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     alignItems: "center",
     justifyContent: "center",
-    overflow: "hidden",
+    // overflow: "hidden",
   },
   buttonText: {
     fontWeight: "600",

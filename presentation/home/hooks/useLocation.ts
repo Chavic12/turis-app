@@ -1,5 +1,5 @@
 import * as Location from "expo-location";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export interface UseLocationReturn {
   locationText: string | null;
@@ -12,47 +12,43 @@ export const useLocation = (): UseLocationReturn => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    async function getCurrentLocation() {
-      try {
-        setIsLoading(true);
+  const getCurrentLocation = useCallback(async () => {
+    setIsLoading(true);
+    setErrorMsg(null);
 
-        // Solicitar permisos
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-          setErrorMsg("Permiso denegado");
-          setIsLoading(false);
-          return;
-        }
-
-        // Obtener ubicación actual
-        const loc = await Location.getCurrentPositionAsync({});
-
-        // Obtener dirección legible
-        const address = await Location.reverseGeocodeAsync({
-          latitude: loc.coords.latitude,
-          longitude: loc.coords.longitude,
-        });
-
-        if (address.length > 0) {
-          const place = address[0];
-          setLocationText(`${place.city}, ${place.region}`);
-        } else {
-          setErrorMsg("No se pudo obtener la dirección");
-        }
-      } catch (err) {
-        setErrorMsg("No se pudo obtener ubicación");
-      } finally {
-        setIsLoading(false);
+    try {
+      // Solicitar permisos
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permiso de ubicación denegado");
+        return;
       }
-    }
 
-    getCurrentLocation();
+      // Obtener ubicación actual
+      const { coords } = await Location.getCurrentPositionAsync({});
+
+      // Obtener dirección legible
+      const [address] = await Location.reverseGeocodeAsync({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+      });
+
+      if (address) {
+        setLocationText(`${address.city}, ${address.region}`);
+      } else {
+        setErrorMsg("No se pudo obtener la dirección");
+      }
+    } catch (err) {
+      console.error("Error obteniendo ubicación:", err);
+      setErrorMsg("No se pudo obtener la ubicación");
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
-  return {
-    locationText,
-    errorMsg,
-    isLoading,
-  };
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
+
+  return { locationText, errorMsg, isLoading };
 };
