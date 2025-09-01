@@ -1,3 +1,4 @@
+import CultureIcon from "@/components/Culture";
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
@@ -34,7 +35,7 @@ export const CategoryItem: React.FC<CategoryItemProps> = ({
           { backgroundColor: item.color + "20" },
         ]}
       >
-        <Text style={categoryStyles.categoryEmoji}>{item.icon}</Text>
+        <CultureIcon width={40} height={40} fill={item.color} />
       </View>
       <Text
         style={[
