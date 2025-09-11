@@ -3,6 +3,7 @@ import { FlatList, ScrollView, TouchableOpacity, View } from "react-native";
 import { Text, useTheme } from "react-native-paper";
 
 // Importaciones organizadas
+import { Link } from "expo-router";
 import {
   CategoryItem,
   HomeHeader,
@@ -108,6 +109,7 @@ export default function HomeScreen() {
             contentContainerStyle={popularEventStyles.popularContainer}
           />
         </View>
+        <Link href="/auth/login">Login</Link>
       </ScrollView>
     </>
   );

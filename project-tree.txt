@@ -1,0 +1,36 @@
+.
+├── README.md
+├── app
+│   ├── (tabs)
+│   ├── _layout.tsx
+│   └── onboarding
+├── app.json
+├── assets
+│   ├── animations
+│   ├── fonts
+│   └── images
+├── babel.config.js
+├── components
+│   ├── Culture.tsx
+│   └── MusicAnimation.tsx
+├── constants
+│   ├── Colors.ts
+│   ├── data.ts
+│   └── sizes.ts
+├── eslint.config.js
+├── expo-env.d.ts
+├── hooks
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+├── presentation
+│   └── home
+├── project-tree.txt
+├── tsconfig.json
+├── types
+│   └── events.ts
+└── utils
+    ├── render-item.ts
+    └── render-item.tsx
+
+15 directories, 19 files

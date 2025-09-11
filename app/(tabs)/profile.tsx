@@ -13,7 +13,7 @@ const ProfileScreen = () => {
         backgroundColor: colors.background,
       }}
     >
-      <Text>Tab [Home|Settings]</Text>
+      <Text>Profile</Text>
     </View>
   );
 };
